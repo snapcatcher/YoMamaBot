@@ -7,8 +7,8 @@ $author_id = $json['message']['from']['id'];
 $author_name = $json['message']['from']['first_name'];
 $current_datetime = date('Ymd-H:i');
 
-$log_file = "stats.txt";
-$file = fopen("stats.txt", "a") or die("can't open file");
+$log_file = "yomama.log";
+$file = fopen($log_file, "a") or die("can't open file");
 
 trigger_error($author_name);
 
