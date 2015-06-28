@@ -29,6 +29,7 @@ base_url = "https://api.telegram.org/bot" + token + "/"
 chat_id = sys.argv[1]
 message = sys.argv[2]
 
-if message == "/YoMama" or message == "/yomama":
+if message.startswith("/YoMama") or message.startswith("/yomama"):
     sendMessage(chat_id, myline)
-
+elif message.startswith("/start"):
+    sendMessage(chat_id, "Receive jokes by sending /yomama")
