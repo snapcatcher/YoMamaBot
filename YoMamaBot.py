@@ -1,35 +1,31 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+import random
+import telepot
+import time
+from datetime import datetime
 
-import json
-import requests
-import sys
-import os
-import random 
+bot = telepot.Bot('<your bot token here')
+def handle_message(msg):
+    content_type, chat_type, chat_id = telepot.glance2(msg)
+    
+    if content_type == 'text':
+        current_datetime = datetime.now().strftime('%Y%m%d-%H:%M')
+        author_name = msg['from']['first_name']
+        author_id = msg['from']['id']
+        chat_id = msg['chat']['id']
+        with open("yomama.log", "a") as myfile:
+            myfile.write(current_datetime + ": " + author_name + '(' + str(author_id) + ')' + " in chat id = " + str(chat_id) + "message: " + msg['text'] + '\n')
+        if msg['text'].startswith('/YoMama') or msg['text'].startswith('/yomama'):
+            message = random.choice(lines)
+            bot.sendMessage(msg['chat']['id'], message)
+        elif msg['text'].startswith('/start'):
+            message = 'Receive jokes by sending /yomama'
+            bot.sendMessage(msg['chat']['id'], message)
 
-def request(url):
-    req = requests.get(url)
-    if req.status_code == 200:
-        return req.json()
-    else:
-        return str(req.status_code)
+bot.notifyOnMessage(handle_message)
+print('Started listening...')
 
-def sendMessage(chat_id, message):
-    print "sending Message = " + message
-    url = base_url + 'sendMessage?chat_id=' + chat_id + '&text=' + message
-    request(url)
+lines = open('<file directory>/jokes.txt').read().splitlines()
 
-current_directory = os.path.dirname(os.path.realpath(__file__))
-
-lines = open(current_directory + '/jokes.txt').read().splitlines()
-myline = random.choice(lines)
-
-token = "<your bot token here>"
-base_url = "https://api.telegram.org/bot" + token + "/"
-
-chat_id = sys.argv[1]
-message = sys.argv[2]
-
-if message.startswith("/YoMama") or message.startswith("/yomama"):
-    sendMessage(chat_id, myline)
-elif message.startswith("/start"):
-    sendMessage(chat_id, "Receive jokes by sending /yomama")
+while True:
+    time.sleep(60)
