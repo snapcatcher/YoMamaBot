@@ -6,7 +6,7 @@ from datetime import datetime
 
 bot = telepot.Bot('<your bot token here')
 def handle_message(msg):
-    content_type, chat_type, chat_id = telepot.glance2(msg)
+    content_type, chat_type, chat_id = telepot.glance(msg)
     
     if content_type == 'text':
         current_datetime = datetime.now().strftime('%Y%m%d-%H:%M')
@@ -19,10 +19,10 @@ def handle_message(msg):
             message = random.choice(lines)
             bot.sendMessage(msg['chat']['id'], message)
         elif msg['text'].startswith('/start'):
-            message = 'Receive jokes by sending /yomama'
+            message = 'Receive jokes by sending /YoMama@YoMamaBot'
             bot.sendMessage(msg['chat']['id'], message)
 
-bot.notifyOnMessage(handle_message)
+bot.message_loop(handle_message)
 print('Started listening...')
 
 lines = open('<file directory>/jokes.txt').read().splitlines()
